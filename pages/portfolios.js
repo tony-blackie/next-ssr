@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-import { Link } from "../routes";
+import Link from "next/link";
 import BaseLayout from "../components/layouts/BaseLayout";
 
 export const getStaticProps = async () => {
@@ -41,7 +41,7 @@ const Portfolios = ({ responsePosts }) => {
       <ul>
         {posts.map((post) => (
           <li key={post.title}>
-            <Link route={`/portfolios/${post.id}`}>
+            <Link as={`/portfolios/${post.id}`} href={`/portfolios/[id]`}>
               <a>{post.title}</a>
             </Link>
           </li>

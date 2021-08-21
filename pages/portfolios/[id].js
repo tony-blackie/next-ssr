@@ -1,41 +1,45 @@
 import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import { Link } from "../../routes";
+import Link from "next/link";
 import axios from "axios";
 
 import BaseLayout from "../../components/layouts/BaseLayout";
 
-const Portfolio = (props) => {
-  const router = useRouter();
+export const getServerSideProps = async ({ params: { id } }) => {
+  const newPost = await axios.get(
+    `https://jsonplaceholder.typicode.com/posts/${id}`
+  );
 
-  const {
-    query: { id },
-  } = router;
+  return {
+    props: {
+      newPost: newPost.data,
+      id,
+    },
+  };
+};
 
-  console.log("router: ", router);
+const Portfolio = ({ newPost, id }) => {
+  const [post, setPost] = useState(newPost);
 
-  const [post, setPost] = useState(null);
+  // useEffect(() => {
+  //   if (!id) {
+  //     return;
+  //   }
 
-  useEffect(() => {
-    if (!id) {
-      return;
-    }
+  //   const requestPortfolio = async () => {
+  //     const newPost = await axios.get(
+  //       `https://jsonplaceholder.typicode.com/posts/${id}`
+  //     );
 
-    const requestPortfolio = async () => {
-      const newPost = await axios.get(
-        `https://jsonplaceholder.typicode.com/posts/${router.query.id}`
-      );
+  //     setPost(newPost.data);
+  //   };
 
-      setPost(newPost.data);
-    };
-
-    requestPortfolio();
-  }, [id]);
+  //   requestPortfolio();
+  // }, [id]);
 
   return (
     <BaseLayout>
       <div>
-        <Link route="/portfolios">
+        <Link href="/portfolios">
           <a>Back</a>
         </Link>
       </div>
